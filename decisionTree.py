@@ -1,8 +1,4 @@
-import csv
-import numpy
-
-
-
+import math
 # Iplementation of CART - Classification and Regression Trees by Leo Breiman
 
 # Recursive Binary Splitting - Greedy Approach to split the space
@@ -19,7 +15,7 @@ def gini_index(groups, classes):
         return 0.0
 
     gini = 0.0
-
+    # Each group can be considered a region that is subdivided by the decision tree or as terminal node / leaf in CART
     for group in groups:
         size = float(len(group))
         proportion = size / numInstances
@@ -37,5 +33,27 @@ def gini_index(groups, classes):
         gini += score * proportion
     return gini
 
-print(gini_index([[[1, 1], [1, 0]], [[1, 1], [1, 0]]], [0, 1]))
-print(gini_index([[[1, 0], [1, 0]], [[1, 1], [1, 1]]], [0, 1]))
+# Shannon Entropy Implementation
+def entropyCalc(groups, classes):
+    numInstaces = float(sum( [len(group) for group in groups] ))
+
+    if numInstaces == 0:
+        return 0.0
+    
+    entropy = 0.0
+    # For each region/terminal node in the decision tree.....
+    for group in groups:
+        size = float(len(group))
+        proportion = size / numInstances
+
+        if proportion == 0:
+            continue
+        
+        score = 0.0
+
+        for classVal in classes:
+            specProp = [row[-1] for row in group].count(classVal) / size
+            score += (-1.0) * specProp*( math.log(specProp) / math.log(2) ) # we use the proportions as a proxy for probabilities
+        entropy += score
+    return entropy
+
