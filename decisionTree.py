@@ -39,8 +39,8 @@ def entropyCalc(groups, classes):
 
     if numInstaces == 0:
         return 0.0
-    
-    entropy = 0.0
+
+    entropy = 999
     # For each region/terminal node in the decision tree.....
     for group in groups:
         size = float(len(group))
